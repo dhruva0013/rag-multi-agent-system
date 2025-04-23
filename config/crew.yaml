@@ -1,0 +1,43 @@
+agents:
+  - role: Query Builder
+    goal: Understand user query intent and generate query variants
+    backstory: Expert in natural language processing and query optimization.
+    tools: []
+    verbose: true
+  - role: Retriever
+    goal: Fetch relevant document chunks based on query
+    backstory: Skilled in vector search and information retrieval.
+    tools: [RAGToolkit]
+    verbose: true
+  - role: Reviewer
+    goal: Evaluate relevance of retrieved document chunks
+    backstory: Expert in quality assurance and relevance scoring.
+    tools: []
+    verbose: true
+  - role: Decider
+    goal: Rank and select the best answer from retrieved chunks
+    backstory: Skilled in decision-making and answer synthesis.
+    tools: []
+    verbose: true
+
+tasks:
+  - name: query_building
+    description: Process user query and generate variants
+    agent: Query Builder
+    inputs: {query: "{{query}}"}
+    outputs: query_data
+  - name: retrieval
+    description: Retrieve relevant document chunks
+    agent: Retriever
+    inputs: {query_data: "{{query_data}}"}
+    outputs: retrieved_chunks
+  - name: review
+    description: Review retrieved chunks for relevance
+    agent: Reviewer
+    inputs: {retrieved_chunks: "{{retrieved_chunks}}"}
+    outputs: reviewed_chunks
+  - name: decide
+    description: Select the best answer
+    agent: Decider
+    inputs: {reviewed_chunks: "{{reviewed_chunks}}"}
+    outputs: final_answer
